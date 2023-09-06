@@ -6,16 +6,19 @@ using System.Threading.Tasks;
 
 namespace NativeShell.Controls
 {
-    public class NativeWebView: WebView
+    public partial class NativeWebView: WebView
     {
 
         public IJSContext Context { get;set; }
+
+        partial void OnAndroidInit();
 
         public NativeWebView()
         {
             Context = DependencyService.Get<IJSContextFactory>().Create();
 
             // setup channel...
+            OnAndroidInit();
 
             
         }
