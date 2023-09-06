@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NativeShell.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,8 @@ namespace NativeShell.Controls
 {
     public partial class NativeWebView: WebView
     {
+
+        private DisposableList disposables = new DisposableList();
 
         public IJSContext Context { get;set; }
 
@@ -21,6 +24,11 @@ namespace NativeShell.Controls
             OnAndroidInit();
 
             
+        }
+
+        ~NativeWebView()
+        {
+            disposables.Dispose();
         }
 
 
