@@ -5,14 +5,24 @@ namespace NativeShell
     /// <summary>
     /// Creates JavaScript Engine that implements IJSContext interface
     /// </summary>
-    public interface IJSContextFactory
+    public abstract partial class JSContextFactory
     {
+
+        static JSContextFactory()
+        {
+            OnPlatformInit();
+        }
+
+        public static JSContextFactory Instance;
+
+        static partial void OnPlatformInit();
+
         /// <summary>
         /// Creates new JavaScript Engine
         /// </summary>
         /// <returns></returns>
-        IJSContext Create();
+        public abstract IJSContext Create();
 
-        IJSContext Create(Uri inverseWebSocketUri);
+        public abstract IJSContext Create(Uri inverseWebSocketUri);
     }
 }

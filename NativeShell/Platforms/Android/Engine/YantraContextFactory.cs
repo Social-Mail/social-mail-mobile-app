@@ -1,24 +1,38 @@
-﻿using NativeShell.Platforms.Android.Engine;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using YantraJS.Core;
 
-[assembly: Dependency(typeof(YantraContextFactory))]
-namespace NativeShell.Platforms.Android.Engine
+namespace NativeShell
 {
-    public class YantraContextFactory : IJSContextFactory
+    partial class JSContextFactory
     {
-        public IJSContext Create()
+        static partial void OnPlatformInit()
         {
-            return new JSContext();
+            JSContextFactory.Instance = new YantraContextFactory();
         }
 
-        public IJSContext Create(Uri inverseWebSocketUri)
+
+        internal class YantraContextFactory : JSContextFactory
         {
-            return new JSContext();
+            private JSContext CreateContext()
+            {
+                var c = new JSContext();
+                c[KeyStrings.global] = c;
+                return c;
+            }
+
+            public override IJSContext Create()
+            {
+                return this.CreateContext();
+            }
+
+            public override IJSContext Create(Uri inverseWebSocketUri)
+            {
+                return this.CreateContext();
+            }
         }
     }
 }

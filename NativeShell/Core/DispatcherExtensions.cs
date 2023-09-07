@@ -25,6 +25,22 @@ namespace NativeShell
                 }
             });
         }
+        public static void DispatchTaskDelayed(this IDispatcher dispatcher, TimeSpan delay, Func<Task> action)
+        {
+            dispatcher.DispatchDelayed(delay, async () =>
+            {
+                try
+                {
+                    await action();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex);
+                }
+            });
+        }
+
+
 
     }
 }

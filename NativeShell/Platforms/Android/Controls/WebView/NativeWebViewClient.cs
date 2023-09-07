@@ -2,11 +2,13 @@
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using NativeShell.Controls;
+using NativeShell.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Android.Views.ViewGroup;
 
 namespace NativeShell.Platforms.Android.Controls
 {
@@ -27,17 +29,7 @@ namespace NativeShell.Platforms.Android.Controls
         public override void OnPageFinished(global::Android.Webkit.WebView? view, string? url)
         {
             base.OnPageFinished(view, url);
-
-            // setup message channel...
-            var channel = platformView.CreateWebMessageChannel();
-            var sender = channel[0];
-            var receiver = channel[1];
-
-            // send receiver to page ...
-            var message = new WebMessage("native-port", new[] { receiver });
-            platformView.PostWebMessage(message, global::Android.Net.Uri.Parse(url));
-
-            sender.SetWebMessageCallback(new MessageCallback(this.nativeWebView, sender));
+            this.nativeWebView.Eval(Scripts.NativeShell);
         }
 
 

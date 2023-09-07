@@ -36,7 +36,7 @@ namespace YantraJS.Core
 
         public string Stack => new JSException("").JSStackTrace.ToString();
 
-        public ClrClassFactory ClassFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public ClrClassFactory ClassFactory { get; set; } = ClrClassFactory.Default;
 
         public event EventHandler<ErrorEventArgs> ErrorEvent;
 

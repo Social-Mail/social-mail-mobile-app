@@ -27,7 +27,7 @@ namespace NativeShell.Controls
 
         public NativeWebView()
         {
-            Context = DependencyService.Get<IJSContextFactory>().Create();
+            Context = JSContextFactory.Instance.Create();
             this.Clr = new GlobalClr();
             Context["clr"] = Context.Marshal(Clr);
 
@@ -35,6 +35,9 @@ namespace NativeShell.Controls
                 this.Eval(s.ToString());
                 return Context.Undefined;
             }, "sendToBrowser");
+
+            this.VerticalOptions = LayoutOptions.Fill;
+            this.HorizontalOptions = LayoutOptions.Fill;
 
             // setup channel...
             OnPlatformInit();

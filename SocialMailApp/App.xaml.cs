@@ -1,4 +1,6 @@
-﻿namespace SocialMailApp;
+﻿using NativeShell.Pages;
+
+namespace SocialMailApp;
 
 public partial class App : Application
 {
@@ -6,6 +8,8 @@ public partial class App : Application
 	{
 		InitializeComponent();
 
-		MainPage = new MainPage();
+		MainPage = new NativeShellMainPage() {
+			
+		};
 	}
 }

@@ -61,7 +61,19 @@ namespace NativeShell.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to (function () {
+        ///    let id = 1;
+        ///    const map = new Map();
+        ///
+        ///    function runCode($rid$, $code$, $args$) {
+        ///        return function () {
+        ///            try {
+        ///                let result = ($code$).apply({ clr, evalInPage }, ...$args$);
+        ///                if (result &amp;&amp; result.then) {
+        ///                    result.then((r) =&gt; {
+        ///                        evalInPage(`window.nativeShell.on($rid$, ${JSON.stringify(r) || 1})`);
+        ///                    }, (e) =&gt; {
+        ///                        evalInPage(`window.nativeShell.on( [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string NativeShell {
             get {

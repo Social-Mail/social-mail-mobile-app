@@ -3,11 +3,13 @@ using Java.Interop;
 using Microsoft.Maui.Handlers;
 using NativeShell.Keyboard;
 using NativeShell.Platforms.Android.Controls;
+using NativeShell.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Android.Views.ViewGroup;
 
 namespace NativeShell.Controls
 {
@@ -32,6 +34,11 @@ namespace NativeShell.Controls
     partial class NativeWebView
     {
 
+        static partial void OnStaticPlatformInit()
+        {
+            Android.Webkit.WebView.SetWebContentsDebuggingEnabled(true);
+        }
+
         private Android.Webkit.WebView PlatformView;
 
         partial void OnPlatformInit()
@@ -40,12 +47,36 @@ namespace NativeShell.Controls
             this.disposables.Register(BackButtonInterceptor.Instance.InterceptBackButton(delegate {
                 this.Eval("androidPressBackButton && androidPressBackButton()");
             }));
-            var webViewHandler = (WebViewHandler)this.Handler;
-            this.PlatformView = webViewHandler.PlatformView;
-            PlatformView.SetWebChromeClient(new NativeWebViewChromeClient(webViewHandler));
-            PlatformView.SetWebViewClient(new NativeWebViewClient(webViewHandler, this));
-            this.PlatformView.AddJavascriptInterface(new JSBridge(this), "androidBridge");
             
+        }
+
+        protected override void OnHandlerChanged()
+        {
+            base.OnHandlerChanged();
+            if (this.Handler != null)
+            {
+                var webViewHandler = (WebViewHandler)this.Handler;
+                this.PlatformView = webViewHandler.PlatformView;
+                PlatformView.SetWebChromeClient(new NativeWebViewChromeClient(webViewHandler));
+                PlatformView.SetWebViewClient(new NativeWebViewClient(webViewHandler, this));
+                this.PlatformView.AddJavascriptInterface(new JSBridge(this), "androidBridge");
+
+                //this.PlatformView.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
+
+                //this.Dispatcher.DispatchDelayed(TimeSpan.FromMilliseconds(100), delegate
+                //{
+
+                //    if (PlatformView.Parent is global::Android.Views.View v)
+                //    {
+                //        v.LayoutParameters = PlatformView.LayoutParameters;
+                //        v.Invalidate();
+                //        if (v.Parent is global::Android.Views.View vp) {
+                //            vp.Invalidate();
+                //        }
+                //    }
+
+                //});
+            }
         }
 
         private void Instance_KeyboardChanged(object? sender, AndroidKeyboardEventArgs e)
