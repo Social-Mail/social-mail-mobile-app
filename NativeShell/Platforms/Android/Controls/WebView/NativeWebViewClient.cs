@@ -30,6 +30,7 @@ namespace NativeShell.Platforms.Android.Controls
         {
             base.OnPageFinished(view, url);
             this.nativeWebView.Eval(Scripts.NativeShell);
+            this.nativeWebView.IsPageReady = true;
         }
 
 

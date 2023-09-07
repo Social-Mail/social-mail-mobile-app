@@ -37,16 +37,16 @@ namespace NativeShell.Pages
                     }
                 }
             };
-            // grid.Children.Add(WebView);
-            // this.Content = grid;
-            this.Content = WebView;
+            grid.Children.Add(WebView);
+            this.Content = grid;
+            // this.Content = WebView;
             Dispatcher.DispatchTaskDelayed(TimeSpan.FromSeconds(1), this.Ask);
         }
 
         private async Task Ask()
         {
 
-            this.Url = Microsoft.Maui.Storage.Preferences.Default.Get<string>("url", null!);
+            // this.Url = Microsoft.Maui.Storage.Preferences.Default.Get<string>("url", null!);
 
             if (this.Url != null)
             {
@@ -64,7 +64,7 @@ namespace NativeShell.Pages
                 }
 
                 this.Url = url;
-                Microsoft.Maui.Storage.Preferences.Default.Set("url", url);
+                // Microsoft.Maui.Storage.Preferences.Default.Set("url", url);
 
                 this.WebView.Source = new UrlWebViewSource {  Url = url };
                 break;

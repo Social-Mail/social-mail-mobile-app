@@ -34,6 +34,8 @@ namespace NativeShell.Controls
     partial class NativeWebView
     {
 
+        internal bool IsPageReady = false;
+
         static partial void OnStaticPlatformInit()
         {
             Android.Webkit.WebView.SetWebContentsDebuggingEnabled(true);
@@ -60,27 +62,16 @@ namespace NativeShell.Controls
                 PlatformView.SetWebChromeClient(new NativeWebViewChromeClient(webViewHandler));
                 PlatformView.SetWebViewClient(new NativeWebViewClient(webViewHandler, this));
                 this.PlatformView.AddJavascriptInterface(new JSBridge(this), "androidBridge");
-
-                //this.PlatformView.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
-
-                //this.Dispatcher.DispatchDelayed(TimeSpan.FromMilliseconds(100), delegate
-                //{
-
-                //    if (PlatformView.Parent is global::Android.Views.View v)
-                //    {
-                //        v.LayoutParameters = PlatformView.LayoutParameters;
-                //        v.Invalidate();
-                //        if (v.Parent is global::Android.Views.View vp) {
-                //            vp.Invalidate();
-                //        }
-                //    }
-
-                //});
             }
         }
 
         private void Instance_KeyboardChanged(object? sender, AndroidKeyboardEventArgs e)
         {
+            if(!this.IsPageReady)
+            {
+                return;
+            }
+
             if (e.IsOpen)
             {
                 var height = e.Height;
