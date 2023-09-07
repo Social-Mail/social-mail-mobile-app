@@ -23,4 +23,19 @@
 		</Compile>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Resources\Scripts.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Scripts.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Resources\Scripts.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Scripts.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	</ItemGroup>
+
 </Project>

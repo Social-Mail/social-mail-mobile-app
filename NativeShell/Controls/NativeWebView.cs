@@ -31,6 +31,11 @@ namespace NativeShell.Controls
             this.Clr = new GlobalClr();
             Context["clr"] = Context.Marshal(Clr);
 
+            Context["evalInPage"] = Context.CreateFunction(1, (c, s) => {
+                this.Eval(s.ToString());
+                return Context.Undefined;
+            }, "sendToBrowser");
+
             // setup channel...
             OnPlatformInit();
 
@@ -43,38 +48,14 @@ namespace NativeShell.Controls
         /// </summary>
         /// <param name="script"></param>
         /// <param name="callback"></param>
-        public void RunMainThreadJavaScript(string script, Action<string> callback)
+        public void RunMainThreadJavaScript(string script)
         {
             Dispatcher.DispatchTask( async () => {
                 try
                 {
-                    string serialized = "{ \"value\": null }";
-                    var result = Context.Evaluate(script);
-                    if (result.IsWrapped)
-                    {
-                        var unwrapped = result.Unwrap<object>();
-                        if (unwrapped is Task task)
-                        {
-                            await task;
-
-                            var taskType = task.GetType();
-
-                            if (taskType != typeof(Task)) {
-                                var p = taskType.GetProperty("Result");
-                                if (p != null)
-                                {
-                                    var value = p.GetValue(task);
-                                    serialized = this.Clr.Serialize(value);
-                                }
-                            }
-                            
-
-                        }
-                    }
-                    callback(serialized);
+                    var result = await this.Clr.SerializeAsync(Context.Evaluate(script));
                 } catch (Exception ex) {
-                    callback(this.Clr.Serialize(ex));
-                    System.Diagnostics.Debug.WriteLine(ex);
+                    System.Diagnostics.Debug.WriteLine(ex.ToString());
                 }
             });
         }

@@ -20,6 +20,8 @@ namespace NativeShell.Platforms.Android.Controls
 
             this.platformView = handler.PlatformView;
             this.nativeWebView = nativeWebView;
+
+           
         }
 
         public override void OnPageFinished(global::Android.Webkit.WebView? view, string? url)
@@ -52,9 +54,7 @@ namespace NativeShell.Platforms.Android.Controls
 
             public override void OnMessage(WebMessagePort? port, WebMessage? message)
             {
-                client.RunMainThreadJavaScript(message.Data, (msg) => {
-                    sender.PostMessage(new WebMessage(msg));
-                });
+                client.RunMainThreadJavaScript(message.Data);
             }
         }
     }

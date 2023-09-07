@@ -1,6 +1,10 @@
 ﻿using CoreGraphics;
+using Foundation;
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
+using NativeShell.Controls;
+using NativeShell.Resources;
+using ObjCRuntime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +14,29 @@ using WebKit;
 
 namespace NativeShell.Platforms.iOS.Controls
 {
+    internal class MainScriptInvoker : NSObject, IWKScriptMessageHandlerWithReply
+    {
+        private readonly Action<string, Action<string>> messageAction;
+
+        public MainScriptInvoker(Action<string,Action<string>> MessageAction)
+        {
+            messageAction = MessageAction;
+        }
+
+        public void DidReceiveScriptMessage(
+            WKUserContentController userContentController, 
+            WKScriptMessage message, 
+            Action<NSObject, NSString> replyHandler)
+        {
+            messageAction(message.Body.ToString(), (msg) => replyHandler((NSString)msg, null!));
+        }
+    }
+
     class NativeWebViewUserContentController: WebKit.WKUserContentController {
+
 
         public NativeWebViewUserContentController()
         {
-        
         }
     }
 
@@ -35,6 +57,20 @@ namespace NativeShell.Platforms.iOS.Controls
             WebViewHandler handler,
             WKWebViewConfiguration configuration) : base(frame, handler, Init(configuration))
         {
+            if (handler.VirtualView is NativeWebView nativeWebView)
+            {
+                if (configuration.UserContentController is NativeWebViewUserContentController nwc)
+                {
+                    nwc.AddScriptMessageHandler(new MainScriptInvoker((s, a) =>
+                    {
+                        nativeWebView.RunMainThreadJavaScript(s);
+                        a("queued");
+                    }), WKContentWorld.Page, "mainScript");
+
+
+                    nativeWebView.Eval(Scripts.NativeShell);
+                }
+            }
         }
     }
 }

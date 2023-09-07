@@ -1,4 +1,5 @@
 ﻿using Android.Webkit;
+using Java.Interop;
 using Microsoft.Maui.Handlers;
 using NativeShell.Keyboard;
 using NativeShell.Platforms.Android.Controls;
@@ -10,6 +11,23 @@ using System.Threading.Tasks;
 
 namespace NativeShell.Controls
 {
+
+    public class JSBridge : Java.Lang.Object
+    {
+        private readonly NativeWebView nativeWebView;
+
+        internal JSBridge(NativeWebView nativeWebView)
+        {
+            this.nativeWebView = nativeWebView;
+        }
+
+        [JavascriptInterface]
+        [Export("invokeAction")]
+        public void InvokeAction(string data)
+        {
+            nativeWebView.RunMainThreadJavaScript(data);
+        }
+    }
 
     partial class NativeWebView
     {
@@ -26,6 +44,8 @@ namespace NativeShell.Controls
             this.PlatformView = webViewHandler.PlatformView;
             PlatformView.SetWebChromeClient(new NativeWebViewChromeClient(webViewHandler));
             PlatformView.SetWebViewClient(new NativeWebViewClient(webViewHandler, this));
+            this.PlatformView.AddJavascriptInterface(new JSBridge(this), "androidBridge");
+            
         }
 
         private void Instance_KeyboardChanged(object? sender, AndroidKeyboardEventArgs e)
