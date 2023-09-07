@@ -16,10 +16,11 @@ namespace NativeShell.Controls
     {
         static partial void OnStaticPlatformInit()
         {
+            var config = MauiWKWebView.CreateConfiguration();
             WebViewHandler.PlatformViewFactory =
                 handler => handler.VirtualView is NativeWebView
-                    ? new NativeWKWebView(CGRect.Empty, (WebViewHandler)handler)
-                    : new MauiWKWebView(CGRect.Empty, (WebViewHandler)handler);
+                    ? new NativeWKWebView(CGRect.Empty, (WebViewHandler)handler, config)
+                    : new MauiWKWebView(CGRect.Empty, (WebViewHandler)handler, config);
         }
 
         partial void OnPlatformInit()

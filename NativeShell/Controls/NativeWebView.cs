@@ -7,17 +7,6 @@ using System.Threading.Tasks;
 
 namespace NativeShell.Controls
 {
-    public class GlobalClr
-    {
-        public GlobalClr() {
-        }
-
-
-        public Type? ResolveType(string  typeName)
-        {
-            return Type.GetType(typeName);
-        }
-    }
 
     public partial class NativeWebView : WebView
     {
@@ -34,11 +23,13 @@ namespace NativeShell.Controls
 
         static  partial void OnStaticPlatformInit();
 
+        public GlobalClr Clr { get; }
+
         public NativeWebView()
         {
             Context = DependencyService.Get<IJSContextFactory>().Create();
-
-            Context["clr"] = Context.Marshal(new GlobalClr());
+            this.Clr = new GlobalClr();
+            Context["clr"] = Context.Marshal(Clr);
 
             // setup channel...
             OnPlatformInit();
@@ -54,12 +45,35 @@ namespace NativeShell.Controls
         /// <param name="callback"></param>
         public void RunMainThreadJavaScript(string script, Action<string> callback)
         {
-            Dispatcher.Dispatch(() => {
+            Dispatcher.DispatchTask( async () => {
                 try
                 {
+                    string serialized = "{ \"value\": null }";
                     var result = Context.Evaluate(script);
-                    callback(result?.ToString() ?? "null");
+                    if (result.IsWrapped)
+                    {
+                        var unwrapped = result.Unwrap<object>();
+                        if (unwrapped is Task task)
+                        {
+                            await task;
+
+                            var taskType = task.GetType();
+
+                            if (taskType != typeof(Task)) {
+                                var p = taskType.GetProperty("Result");
+                                if (p != null)
+                                {
+                                    var value = p.GetValue(task);
+                                    serialized = this.Clr.Serialize(value);
+                                }
+                            }
+                            
+
+                        }
+                    }
+                    callback(serialized);
                 } catch (Exception ex) {
+                    callback(this.Clr.Serialize(ex));
                     System.Diagnostics.Debug.WriteLine(ex);
                 }
             });

@@ -10,12 +10,31 @@ using WebKit;
 
 namespace NativeShell.Platforms.iOS.Controls
 {
+    class NativeWebViewUserContentController: WebKit.WKUserContentController {
+
+        public NativeWebViewUserContentController()
+        {
+        
+        }
+    }
+
     internal class NativeWKWebView : MauiWKWebView
     {
-        public NativeWKWebView(CGRect frame, WebViewHandler handler) : base(frame, handler)
+        private static WKWebViewConfiguration Init(WKWebViewConfiguration configuration)
         {
-
+            configuration.AllowsInlineMediaPlayback = true;
+            configuration.Preferences.JavaScriptCanOpenWindowsAutomatically = true;
+            configuration.Preferences.JavaScriptEnabled = true;
+            configuration.MediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypes.None;
+            configuration.UserContentController = new NativeWebViewUserContentController();
+            return configuration;
         }
 
+        public NativeWKWebView(
+            CGRect frame,
+            WebViewHandler handler,
+            WKWebViewConfiguration configuration) : base(frame, handler, Init(configuration))
+        {
+        }
     }
 }
