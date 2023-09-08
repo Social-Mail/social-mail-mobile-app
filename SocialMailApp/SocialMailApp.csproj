@@ -30,6 +30,14 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+		<!-- For iOS publish-->
+	<PropertyGroup Condition="$(TargetFramework.Contains('-ios')) and '$(Configuration)' == 'Release'">
+		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+		<CodesignKey>iPhone Distribution: John Smith (AY2GDE9QM7)</CodesignKey>
+		<CodesignProvision>build_pp.mobileprovision</CodesignProvision>
+		<ArchiveOnBuild>true</ArchiveOnBuild>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
