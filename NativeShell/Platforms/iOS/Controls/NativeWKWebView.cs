@@ -3,6 +3,7 @@ using Foundation;
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using NativeShell.Controls;
+using NativeShell.Platforms.iOS.Controls.WebView;
 using NativeShell.Resources;
 using ObjCRuntime;
 using System;
@@ -59,6 +60,10 @@ namespace NativeShell.Platforms.iOS.Controls
         {
             if (handler.VirtualView is NativeWebView nativeWebView)
             {
+
+                this.UIDelegate = new NativeWebViewUIDelegate(handler);
+                this.NavigationDelegate = new NativeWebViewNavigationDelegate(this.NavigationDelegate);
+
                 if (configuration.UserContentController is NativeWebViewUserContentController nwc)
                 {
                     nwc.AddScriptMessageHandler(new MainScriptInvoker((s, a) =>
