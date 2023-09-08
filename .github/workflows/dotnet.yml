@@ -63,7 +63,12 @@ jobs:
           dotnet workload install maui --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet7/nuget/v3/index.json --source https://api.nuget.org/v3/index.json
           dotnet workload install android ios maccatalyst tvos macos maui wasm-tools --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet7/nuget/v3/index.json --source https://api.nuget.org/v3/index.json
     
-      - name: Restore nuget packages
+    - name: Git Sumbodule Update
+      run: |
+        git pull --recurse-submodules
+        git submodule update --remote --recursive
+        
+    - name: Restore nuget packages
         run: |
           dotnet restore SocialMailApp.sln
         
@@ -71,7 +76,7 @@ jobs:
       - name : Build iOS App
         shell: bash
         run: |
-          dotnet build -f net7.0-ios -c Release /p:RuntimeIdentifier=ios-arm64 /p:ArchiveOnBuild=true SocialMailApp/SocialMailApp.csproj
+          dotnet build -f net7.0-ios -c Release /p:RuntimeIdentifier=ios-arm64 /p:ArchiveOnBuild=true SocialMailApp/SocialMailApp.csproj --no-restore
 
 #       - name: Build and Run UnitTests
 #         shell: bash
