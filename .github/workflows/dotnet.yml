@@ -18,7 +18,8 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2
-
+        with:
+          submodules: recursive
       # https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development
       # github docs for installing cert and provisioning profile
       
