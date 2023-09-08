@@ -33,7 +33,7 @@
 		<!-- For iOS publish-->
 	<PropertyGroup Condition="$(TargetFramework.Contains('-ios')) and '$(Configuration)' == 'Release'">
 		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
-		<CodesignKey>iPhone Distribution: John Smith (AY2GDE9QM7)</CodesignKey>
+		<CodesignKey>iPhone Distribution: NeuroSpeech Technologies Private Limited (XGZ87AZF38)</CodesignKey>
 		<CodesignProvision>build_pp.mobileprovision</CodesignProvision>
 		<ArchiveOnBuild>true</ArchiveOnBuild>
 	</PropertyGroup>
