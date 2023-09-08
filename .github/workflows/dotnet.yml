@@ -69,8 +69,8 @@ jobs:
           git submodule update --remote --recursive
           
       - name: Restore nuget packages
-          run: |
-            dotnet restore SocialMailApp.sln
+        run: |
+          dotnet restore SocialMailApp.sln
         
         # https://docs.microsoft.com/en-us/dotnet/maui/ios/deployment/overview
       - name : Build iOS App
