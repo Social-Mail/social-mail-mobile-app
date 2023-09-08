@@ -79,6 +79,12 @@ namespace NativeShell.Keyboard
 
         private double minSize = 0;
 
+        public void Refresh()
+        {
+            lastHeight = -1;
+            OnGlobalLayout();
+        }
+
         public void OnGlobalLayout()
         {
             if (decorView == null)
@@ -92,11 +98,15 @@ namespace NativeShell.Keyboard
             Rect rect = new Rect();
             decorView.GetWindowVisibleDisplayFrame(rect);
             double screenHeight = decorView.RootView.Height;
-            double keyboardHeight = screenHeight - rect.Bottom;
+            double keyboardHeight = screenHeight - rect.Height;
+            if (rect.Height == 0) {
+                return;
+            }
             if (keyboardHeight != lastHeight)
             {
                 lastHeight = keyboardHeight;
                 double heightInPercentage = keyboardHeight / screenHeight;
+                System.Diagnostics.Debug.WriteLine($"lastHeight = {lastHeight}, height% = {heightInPercentage}, screen = ${screenHeight} , rect = {rect.Bottom}");
                 KeyboardChanged?.Invoke(this, new AndroidKeyboardEventArgs()
                 {
                     IsOpen = heightInPercentage > 0.1,
