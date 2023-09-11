@@ -77,7 +77,7 @@ jobs:
       - name : Build iOS App
         shell: bash
         run: |
-          dotnet publish -f net7.0-ios -c Release SocialMailApp/SocialMailApp.csproj
+          dotnet publish -f net7.0-ios -c Release SocialMailApp/SocialMailApp.csproj /p:BuildIpa=true
 
 #       - name: Build and Run UnitTests
 #         shell: bash
