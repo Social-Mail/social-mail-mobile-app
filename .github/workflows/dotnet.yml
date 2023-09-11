@@ -8,9 +8,6 @@ on:
 
   workflow_dispatch:
 
-env:
-    DOTNETVERSION: 6.0.300
-
 jobs:
   
   buildiOS:
@@ -52,10 +49,9 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           
-      - name: Setup .NET SDK ${{env.DOTNETVERSION}}
-        uses: actions/setup-dotnet@v1
+      - uses: actions/setup-dotnet@v2
         with:
-          dotnet-version:  '${{env.DOTNETVERSION}}'
+          dotnet-version: '7.0.x'
 
       - name: Install .NET MAUI
         shell: bash

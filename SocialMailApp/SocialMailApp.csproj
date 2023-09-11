@@ -36,7 +36,6 @@
 		<CodesignKey>iPhone Distribution: NeuroSpeech Technologies Private Limited (XGZ87AZF38)</CodesignKey>
 		<CodesignProvision>Social Mail Provisioning Profile</CodesignProvision>
 		<ArchiveOnBuild>true</ArchiveOnBuild>
-		<BuildIpa>true</BuildIpa>
 	</PropertyGroup>
 
 	<ItemGroup>
