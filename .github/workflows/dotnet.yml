@@ -85,5 +85,5 @@ jobs:
         with:
           name: artifacts-ios
           path: |
-            SocialMailApp/bin/Release/**/*.app
+            SocialMailApp/**/*.ipa
       
