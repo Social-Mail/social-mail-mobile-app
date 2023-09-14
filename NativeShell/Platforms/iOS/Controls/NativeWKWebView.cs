@@ -38,7 +38,12 @@ namespace NativeShell.Platforms.iOS.Controls
 
         public NativeWebViewUserContentController()
         {
+            var script = Scripts.NativeShell;
+            this.AddUserScript(new WKUserScript((NSString)script, WebKit.WKUserScriptInjectionTime.AtDocumentStart, false));
+
         }
+
+        
     }
 
     internal class NativeWKWebView : MauiWKWebView
@@ -62,7 +67,7 @@ namespace NativeShell.Platforms.iOS.Controls
             {
 
                 this.UIDelegate = new NativeWebViewUIDelegate(handler);
-                this.NavigationDelegate = new NativeWebViewNavigationDelegate(this.NavigationDelegate);
+                // this.NavigationDelegate = new NativeWebViewNavigationDelegate(this.NavigationDelegate);
 
                 if (configuration.UserContentController is NativeWebViewUserContentController nwc)
                 {
@@ -72,8 +77,7 @@ namespace NativeShell.Platforms.iOS.Controls
                         a("queued");
                     }), WKContentWorld.Page, "mainScript");
 
-
-                    nativeWebView.Eval(Scripts.NativeShell);
+                    // nativeWebView.Eval(Scripts.NativeShell);
                 }
             }
         }

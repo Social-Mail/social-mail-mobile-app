@@ -51,7 +51,14 @@ namespace NativeShell.Platforms.iOS.Controls.WebView
                 dispatcher.DispatchTask(() => Browser.OpenAsync(url, BrowserLaunchMode.External));
                 return;
             }
-            navigationDelegate.DecidePolicy(webView, navigationAction, decisionHandler);
+            try
+            {
+                navigationDelegate.DecidePolicy(webView, navigationAction, decisionHandler);
+            } catch (Exception ex)
+            {
+                decisionHandler(WKNavigationActionPolicy.Allow);
+                System.Diagnostics.Debug.WriteLine(ex);
+            }
         }
 
         public override void DecidePolicy(WKWebView webView, WKNavigationResponse navigationResponse, Action<WKNavigationResponsePolicy> decisionHandler)
