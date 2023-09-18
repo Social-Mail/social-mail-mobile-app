@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          submodules: recursive
 
       - name: Setup .NET 7
         uses: actions/setup-dotnet@v1
@@ -34,19 +36,18 @@ jobs:
           git pull --recurse-submodules
           git submodule update --remote --recursive
 
+      - name: Setup Signer
+        run: |
+          echo "${{ secrets.RELEASE_KEYSTORE }}" > ./release.jks.base64
+          certutil -decode ./release.jks.base64 ./release.decrypted.jks
+
       - name: Install MAUI Workloads
         run: |
           dotnet workload install android --ignore-failed-sources
           dotnet workload install maui --ignore-failed-sources
 
-      - name: Setup Signer
-        shell: bash
-        run: |
-          echo "${{ secrets.RELEASE_KEYSTORE }}" > ./release.jks.base64
-          base64 -d ./release.jks.base64 > ./release.decrypted.jks
-
       - name: Build MAUI Android
-        run: dotnet publish -f net7.0-android -c Release SocialMailApp/SocialMailApp.csproj /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=${{ secrets.RELEASE_KEYSTORE_ALIAS }} /p:AndroidSigningKeyStore=./release.decrypted.jks /p:AndroidSigningStorePass=${{ secrets.RELEASE_KEYSTORE_PASSWORD }} /p:ApplicationId=com.tas800.app /p:BuildIpa=true /p:ApplicationVersion=$GITHUB_RUN_NUMBER
+        run: dotnet publish -f net7.0-android -c Release SocialMailApp/SocialMailApp.csproj /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias="${{ secrets.RELEASE_KEYSTORE_ALIAS }}" /p:AndroidSigningKeyStore=./release.decrypted.jks /p:AndroidSigningStorePass=${{ secrets.RELEASE_KEYSTORE_PASSWORD }} /p:ApplicationId=com.tas800.app /p:BuildIpa=true /p:ApplicationVersion=$GITHUB_RUN_NUMBER
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v2.3.1
