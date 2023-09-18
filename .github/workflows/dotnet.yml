@@ -86,4 +86,17 @@ jobs:
           name: artifacts-ios
           path: |
             SocialMailApp/**/*.ipa
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+
+      - name: 'Upload app to TestFlight'
+        uses: apple-actions/upload-testflight-build@v1
+        with: 
+          app-path: 'SocialMailApp/bin/Release/net7.0-ios/ios-arm64/publish/SocialMailApp.ipa' 
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
       
