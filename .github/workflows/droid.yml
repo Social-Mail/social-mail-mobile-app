@@ -42,11 +42,11 @@ jobs:
       - name: Setup Signer
         shell: bash
         run: |
-          echo "${{ secrets.RELEASE_KEYSTORE }}" > android/release.jks.base64
-          base64 -d android/release.jks.base64 > android/release.decrypted.jks
+          echo "${{ secrets.RELEASE_KEYSTORE }}" > ./release.jks.base64
+          base64 -d android/release.jks.base64 > ./release.decrypted.jks
 
       - name: Build MAUI Android
-        run: dotnet publish -f net7.0-android -c Release SocialMailApp/SocialMailApp.csproj /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=${{ secrets.RELEASE_KEYSTORE_ALIAS }} /p:AndroidSigningKeyStore=android/release.decrypted.jks /p:AndroidSigningStorePass=${{ secrets.RELEASE_KEYSTORE_PASSWORD }} /p:ApplicationId=com.tas800.app /p:BuildIpa=true /p:ApplicationVersion=$GITHUB_RUN_NUMBER
+        run: dotnet publish -f net7.0-android -c Release SocialMailApp/SocialMailApp.csproj /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=${{ secrets.RELEASE_KEYSTORE_ALIAS }} /p:AndroidSigningKeyStore=./release.decrypted.jks /p:AndroidSigningStorePass=${{ secrets.RELEASE_KEYSTORE_PASSWORD }} /p:ApplicationId=com.tas800.app /p:BuildIpa=true /p:ApplicationVersion=$GITHUB_RUN_NUMBER
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v2.3.1
