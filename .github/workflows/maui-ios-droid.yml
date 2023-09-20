@@ -74,12 +74,19 @@ jobs:
       #   run: |
       #     dotnet publish -f net7.0-ios -c Release SocialMailApp/SocialMailApp.csproj /p:BuildIpa=true /p:ApplicationVersion=$GITHUB_RUN_NUMBER
 
-      - name: Install KeyStore
-        shell: bash
-        env:
-          RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
-        run: |
-          echo -n "$RELEASE_KEYSTORE" | base64 --decode --output ./key.jks
+      - name: Install Keystore
+        id: write_file
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: 'key.jks'
+          encodedString: ${{ secrets.RELEASE_KEYSTORE }}
+
+      # - name: Install KeyStore
+      #   shell: bash
+      #   env:
+      #     RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+      #   run: |
+      #     echo -n "$RELEASE_KEYSTORE" | base64 --decode --output ./key.jks
 
       - name: Build MAUI Android
         run: dotnet publish -f net7.0-android -c Release SocialMailApp/SocialMailApp.csproj /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=env:RELEASE_KEYSTORE_ALIAS /p:AndroidSigningKeyStore=./key.jks /p:AndroidSigningStorePass=env:RELEASE_KEYSTORE_PASSWORD /p:AndroidSigningKeyPass=env:RELEASE_KEYSTORE_PASSWORD /p:ApplicationId=com.tas800.app /p:BuildIpa=true /p:ApplicationVersion=$GITHUB_RUN_NUMBER
