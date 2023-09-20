@@ -15,8 +15,9 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: recursive
+        # with:
+        #   submodules: recursive
+
       # https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development
       # github docs for installing cert and provisioning profile
       
@@ -59,12 +60,7 @@ jobs:
           dotnet nuget locals all --clear 
           dotnet workload install maui --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet7/nuget/v3/index.json --source https://api.nuget.org/v3/index.json
           dotnet workload install android ios maccatalyst tvos macos maui wasm-tools --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet7/nuget/v3/index.json --source https://api.nuget.org/v3/index.json
-    
-      - name: Git Sumbodule Update
-        run: |
-          git pull --recurse-submodules
-          git submodule update --remote --recursive
-          
+        
       - name: Restore nuget packages
         run: |
           dotnet restore SocialMailApp.sln
@@ -74,22 +70,23 @@ jobs:
       #   run: |
       #     dotnet publish -f net7.0-ios -c Release SocialMailApp/SocialMailApp.csproj /p:BuildIpa=true /p:ApplicationVersion=$GITHUB_RUN_NUMBER
 
-      - name: Install Keystore
-        id: write_file
-        uses: timheuer/base64-to-file@v1.2
-        with:
-          fileName: 'key.jks'
-          encodedString: ${{ secrets.RELEASE_KEYSTORE }}
+      # - name: Install Keystore
+      #   id: write_file
+      #   uses: timheuer/base64-to-file@v1.2
+      #   with:
+      #     fileName: 'key.jks'
+      #     encodedString: ${{ secrets.RELEASE_KEYSTORE }}
 
-      # - name: Install KeyStore
-      #   shell: bash
-      #   env:
-      #     RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
-      #   run: |
-      #     echo -n "$RELEASE_KEYSTORE" | base64 --decode --output ./key.jks
+      - name: Install KeyStore
+        shell: bash
+        env:
+          RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+        run: |
+            KEY_PATH=$RUNNER_TEMP/android.keystore
+            echo -n "$RELEASE_KEYSTORE" | base64 --decode --output $KEY_PATH
 
       - name: Build MAUI Android
-        run: dotnet publish -f net7.0-android -c Release SocialMailApp/SocialMailApp.csproj /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=env:RELEASE_KEYSTORE_ALIAS /p:AndroidSigningKeyStore=./key.jks /p:AndroidSigningStorePass=env:RELEASE_KEYSTORE_PASSWORD /p:AndroidSigningKeyPass=env:RELEASE_KEYSTORE_PASSWORD /p:ApplicationId=com.tas800.app /p:BuildIpa=true /p:ApplicationVersion=$GITHUB_RUN_NUMBER
+        run: dotnet publish -f net7.0-android -c Release SocialMailApp/SocialMailApp.csproj /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=env:RELEASE_KEYSTORE_ALIAS /p:AndroidSigningKeyStore=$RUNNER_TEMP/android.keystore /p:AndroidSigningStorePass=env:RELEASE_KEYSTORE_PASSWORD /p:AndroidSigningKeyPass=env:RELEASE_KEYSTORE_PASSWORD /p:ApplicationId=com.tas800.app /p:BuildIpa=true /p:ApplicationVersion=$GITHUB_RUN_NUMBER
         env:
           RELEASE_KEYSTORE_ALIAS: ${{ secrets.RELEASE_KEYSTORE_ALIAS }}
           RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
