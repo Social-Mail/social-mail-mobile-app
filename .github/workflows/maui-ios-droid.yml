@@ -69,17 +69,24 @@ jobs:
         run: |
           dotnet restore SocialMailApp.sln
         
-        # https://docs.microsoft.com/en-us/dotnet/maui/ios/deployment/overview
       - name : Build iOS App
         shell: bash
         run: |
           dotnet publish -f net7.0-ios -c Release SocialMailApp/SocialMailApp.csproj /p:BuildIpa=true /p:ApplicationVersion=$GITHUB_RUN_NUMBER
 
-#       - name: Build and Run UnitTests
-#         shell: bash
-#         run: |
-#           dotnet build <path to unit test csproj>
-#           dotnet test <path to unit test csproj> --no-build --verbosity normal
+      - name: Install KeyStore
+        shell: bash
+        run: |
+          echo -n "$RELEASE_KEYSTORE" | base64 --decode --output ./release.decrypted.jks
+
+      - name: Build MAUI Android
+        run: dotnet publish -f net7.0-android -c Release SocialMailApp/SocialMailApp.csproj /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias="${{ secrets.RELEASE_KEYSTORE_ALIAS }}" /p:AndroidSigningKeyStore=./release.decrypted.jks /p:AndroidSigningStorePass=${{ secrets.RELEASE_KEYSTORE_PASSWORD }} /p:ApplicationId=com.tas800.app /p:BuildIpa=true /p:ApplicationVersion=$GITHUB_RUN_NUMBER
+
+      - name: Upload Android Artifact
+        uses: actions/upload-artifact@v2.3.1
+        with:
+          name: android-ci-build
+          path: src/MauiBeach/bin/Release/net7.0-android/*Signed.a*
 
       - uses: actions/upload-artifact@v2
         with:
