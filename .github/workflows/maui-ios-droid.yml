@@ -48,10 +48,6 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           
-      - uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: '7.0.x'
-
       - name: Install .NET MAUI
         shell: bash
         run: |
