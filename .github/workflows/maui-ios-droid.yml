@@ -15,8 +15,6 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2
-        # with:
-        #   submodules: recursive
 
       # https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development
       # github docs for installing cert and provisioning profile
@@ -65,17 +63,10 @@ jobs:
         run: |
           dotnet restore SocialMailApp.sln
         
-      # - name : Build iOS App
-      #   shell: bash
-      #   run: |
-      #     dotnet publish -f net7.0-ios -c Release SocialMailApp/SocialMailApp.csproj /p:BuildIpa=true /p:ApplicationVersion=$GITHUB_RUN_NUMBER
-
-      # - name: Install Keystore
-      #   id: write_file
-      #   uses: timheuer/base64-to-file@v1.2
-      #   with:
-      #     fileName: 'key.jks'
-      #     encodedString: ${{ secrets.RELEASE_KEYSTORE }}
+      - name : Build iOS App
+        shell: bash
+        run: |
+          dotnet publish -f net7.0-ios -c Release SocialMailApp/SocialMailApp.csproj /p:BuildIpa=true /p:ApplicationVersion=$GITHUB_RUN_NUMBER
 
       # base64 must not be multi line, it should be single line for
       # following to work correctly
@@ -92,17 +83,16 @@ jobs:
       # 2. If password contains any non alphabet sign such as @, $, %, $, you must escape with a forward slash "\" in the github secrets
       # 3. KeyStore path must be fully qualified, relative path to current directory even if it is correct, dotnet publish does not accept it.
       - name: Build MAUI Android
-        run: dotnet publish -v:d -f net7.0-android -c Release SocialMailApp/SocialMailApp.csproj /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=$RELEASE_KEYSTORE_ALIAS /p:AndroidSigningKeyStore=$RUNNER_TEMP/android.keystore /p:AndroidSigningStorePass=env:RELEASE_KEYSTORE_PASSWORD /p:AndroidSigningKeyPass=env:RELEASE_KEYSTORE_PASSWORD /p:ApplicationVersion=$GITHUB_RUN_NUMBER
-        # run: dotnet publish -f net7.0-android -c Release SocialMailApp/SocialMailApp.csproj /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=$RELEASE_KEYSTORE_ALIAS /p:AndroidSigningKeyStore=$RUNNER_TEMP/android.keystore /p:AndroidSigningStorePass=env:RELEASE_KEYSTORE_PASSWORD /p:AndroidSigningKeyPass=env:RELEASE_KEYSTORE_PASSWORD /p:ApplicationVersion=$GITHUB_RUN_NUMBER
+        run: dotnet publish -f net7.0-android -c Release SocialMailApp/SocialMailApp.csproj /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=$RELEASE_KEYSTORE_ALIAS /p:AndroidSigningKeyStore=$RUNNER_TEMP/android.keystore /p:AndroidSigningStorePass=env:RELEASE_KEYSTORE_PASSWORD /p:AndroidSigningKeyPass=env:RELEASE_KEYSTORE_PASSWORD /p:ApplicationVersion=$GITHUB_RUN_NUMBER
         env:
           RELEASE_KEYSTORE_ALIAS: ${{ secrets.RELEASE_KEYSTORE_ALIAS }} # Alias must be in lower case, verify this
-          RELEASE_KEYSTORE_PASSWORD: '${{ secrets.RELEASE_KEYSTORE_PASSWORD }}'
+          RELEASE_KEYSTORE_PASSWORD: '${{ secrets.RELEASE_KEYSTORE_PASSWORD }}' # Password should be specified within the single quotes
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v2.3.1
         with:
           name: android-ci-build
-          path: src/MauiBeach/bin/Release/net7.0-android/*Signed.a*
+          path: SocialMailApp/bin/Release/net7.0-android/*signed.a*
 
       - uses: actions/upload-artifact@v2
         with:
@@ -110,6 +100,13 @@ jobs:
           path: |
             SocialMailApp/**/*.ipa
 
+      - uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: in.socialmail.app
+          releaseFiles: SocialMailApp/bin/Release/net7.0-android/*signed.aab
+          track: beta
+          
       - name: 'Upload app to TestFlight'
         uses: apple-actions/upload-testflight-build@v1
         with: 
