@@ -32,8 +32,8 @@ jobs:
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
           # import certificate and provisioning profile from secrets
-          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
-          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode --output $PP_PATH
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
 
           # create temporary keychain
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
@@ -48,6 +48,16 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           
+      # base64 must not be multi line, it should be single line for
+      # following to work correctly
+      - name: Install KeyStore
+        shell: bash
+        env:
+          RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+        run: |
+            KEY_PATH=$RUNNER_TEMP/android.keystore
+            echo -n "$RELEASE_KEYSTORE" | base64 --decode -o $KEY_PATH
+
       - name: Install .NET MAUI
         shell: bash
         run: |
@@ -63,16 +73,6 @@ jobs:
         shell: bash
         run: |
           dotnet publish -f net7.0-ios -c Release SocialMailApp/SocialMailApp.csproj /p:BuildIpa=true /p:ApplicationVersion=$GITHUB_RUN_NUMBER
-
-      # base64 must not be multi line, it should be single line for
-      # following to work correctly
-      - name: Install KeyStore
-        shell: bash
-        env:
-          RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
-        run: |
-            KEY_PATH=$RUNNER_TEMP/android.keystore
-            echo -n "$RELEASE_KEYSTORE" | base64 --decode --output $KEY_PATH
 
       # Undocumented HELP
       # 1. KeyStore and Alias do not accept env: prefix, it is only applicable for password
