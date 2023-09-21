@@ -11,7 +11,7 @@ on:
 jobs:
   
   buildiOS:
-    runs-on: macos-12
+    runs-on: macos-13
     
     steps:
       - uses: actions/checkout@v2
@@ -104,7 +104,7 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: in.socialmail.app
-          releaseFiles: SocialMailApp/**/*signed.aab
+          releaseFiles: SocialMailApp/bin/Release/net7.0-android/publish/*-Signed.aab
           track: beta
           
       - name: 'Upload app to TestFlight'
