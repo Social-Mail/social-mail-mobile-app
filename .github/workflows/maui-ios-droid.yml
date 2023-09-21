@@ -88,15 +88,15 @@ jobs:
             echo -n "$RELEASE_KEYSTORE" | base64 --decode --output $KEY_PATH
 
       # Undocumented HELP
-      # 1. KeyStore does not accept env: prefix, it is only applicable for alias and password
+      # 1. KeyStore and Alias do not accept env: prefix, it is only applicable for password
       # 2. If password contains any non alphabet sign such as @, $, %, $, you must escape with a forward slash "\" in the github secrets
       # 3. KeyStore path must be fully qualified, relative path to current directory even if it is correct, dotnet publish does not accept it.
       - name: Build MAUI Android
-        # run: dotnet publish -v:d -f net7.0-android -c Release SocialMailApp/SocialMailApp.csproj /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=$RELEASE_KEYSTORE_ALIAS /p:AndroidSigningKeyStore=$RUNNER_TEMP/android.keystore /p:AndroidSigningStorePass=env:RELEASE_KEYSTORE_PASSWORD /p:AndroidSigningKeyPass=env:RELEASE_KEYSTORE_PASSWORD /p:ApplicationVersion=$GITHUB_RUN_NUMBER
-        run: dotnet publish -f net7.0-android -c Release SocialMailApp/SocialMailApp.csproj /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=$RELEASE_KEYSTORE_ALIAS /p:AndroidSigningKeyStore=$RUNNER_TEMP/android.keystore /p:AndroidSigningStorePass=env:RELEASE_KEYSTORE_PASSWORD /p:AndroidSigningKeyPass=env:RELEASE_KEYSTORE_PASSWORD /p:ApplicationVersion=$GITHUB_RUN_NUMBER
+        run: dotnet publish -v:d -f net7.0-android -c Release SocialMailApp/SocialMailApp.csproj /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=$RELEASE_KEYSTORE_ALIAS /p:AndroidSigningKeyStore=$RUNNER_TEMP/android.keystore /p:AndroidSigningStorePass=env:RELEASE_KEYSTORE_PASSWORD /p:AndroidSigningKeyPass=env:RELEASE_KEYSTORE_PASSWORD /p:ApplicationVersion=$GITHUB_RUN_NUMBER
+        # run: dotnet publish -f net7.0-android -c Release SocialMailApp/SocialMailApp.csproj /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=$RELEASE_KEYSTORE_ALIAS /p:AndroidSigningKeyStore=$RUNNER_TEMP/android.keystore /p:AndroidSigningStorePass=env:RELEASE_KEYSTORE_PASSWORD /p:AndroidSigningKeyPass=env:RELEASE_KEYSTORE_PASSWORD /p:ApplicationVersion=$GITHUB_RUN_NUMBER
         env:
           RELEASE_KEYSTORE_ALIAS: ${{ secrets.RELEASE_KEYSTORE_ALIAS }} # Alias must be in lower case, verify this
-          RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+          RELEASE_KEYSTORE_PASSWORD: '${{ secrets.RELEASE_KEYSTORE_PASSWORD }}'
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v2.3.1
