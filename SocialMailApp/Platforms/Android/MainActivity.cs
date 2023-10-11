@@ -46,7 +46,7 @@ namespace SocialMailApp;
 )]
 [Activity(
     Theme = "@style/Maui.SplashTheme",
-    // MainLauncher = true,
+    MainLauncher = true,
     Exported = true,
     ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density)]
 public class MainActivity : MauiAppCompatActivity
