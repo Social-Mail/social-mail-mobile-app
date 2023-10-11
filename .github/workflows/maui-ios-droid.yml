@@ -102,6 +102,7 @@ jobs:
           packageName: in.socialmail.app
           releaseFiles: SocialMailApp/bin/Release/net7.0-android/publish/*-Signed.aab
           track: beta
+          status: draft
           
       - name: 'Upload app to TestFlight'
         uses: apple-actions/upload-testflight-build@v1
