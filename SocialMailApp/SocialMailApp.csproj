@@ -39,7 +39,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="NeuroSpeech.NativeShell" Version="1.2.7" />
+		<PackageReference Include="NeuroSpeech.NativeShell" Version="1.2.9" />
 	</ItemGroup>
 
 	<ItemGroup>
