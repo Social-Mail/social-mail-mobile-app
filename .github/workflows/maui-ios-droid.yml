@@ -62,8 +62,8 @@ jobs:
         shell: bash
         run: |
           dotnet nuget locals all --clear 
-          dotnet workload install maui --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet7/nuget/v3/index.json --source https://api.nuget.org/v3/index.json
-          dotnet workload install android ios maccatalyst tvos macos maui wasm-tools --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet7/nuget/v3/index.json --source https://api.nuget.org/v3/index.json
+          dotnet workload install maui --source https://api.nuget.org/v3/index.json
+          dotnet workload install android ios maccatalyst tvos macos maui wasm-tools --source https://api.nuget.org/v3/index.json
         
       - name: Restore nuget packages
         run: |
@@ -72,14 +72,14 @@ jobs:
       - name : Build iOS App
         shell: bash
         run: |
-          dotnet publish -f net7.0-ios -c Release SocialMailApp/SocialMailApp.csproj /p:BuildIpa=true /p:ApplicationVersion=$GITHUB_RUN_NUMBER
+          dotnet publish -f net8.0-ios -c Release SocialMailApp/SocialMailApp.csproj /p:BuildIpa=true /p:ApplicationVersion=$GITHUB_RUN_NUMBER
 
       # Undocumented HELP
       # 1. KeyStore and Alias do not accept env: prefix, it is only applicable for password
       # 2. If password contains any non alphabet sign such as @, $, %, $, you must escape with a forward slash "\" in the github secrets
       # 3. KeyStore path must be fully qualified, relative path to current directory even if it is correct, dotnet publish does not accept it.
       - name: Build MAUI Android
-        run: dotnet publish -v:m -f net7.0-android -c Release SocialMailApp/SocialMailApp.csproj /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=$RELEASE_KEYSTORE_ALIAS /p:AndroidSigningKeyStore=$RUNNER_TEMP/android.keystore /p:AndroidSigningStorePass=env:RELEASE_KEYSTORE_PASSWORD /p:AndroidSigningKeyPass=env:RELEASE_KEYSTORE_PASSWORD /p:ApplicationVersion=$GITHUB_RUN_NUMBER
+        run: dotnet publish -v:m -f net8.0-android -c Release SocialMailApp/SocialMailApp.csproj /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=$RELEASE_KEYSTORE_ALIAS /p:AndroidSigningKeyStore=$RUNNER_TEMP/android.keystore /p:AndroidSigningStorePass=env:RELEASE_KEYSTORE_PASSWORD /p:AndroidSigningKeyPass=env:RELEASE_KEYSTORE_PASSWORD /p:ApplicationVersion=$GITHUB_RUN_NUMBER
         env:
           RELEASE_KEYSTORE_ALIAS: ${{ secrets.RELEASE_KEYSTORE_ALIAS }} # Alias must be in lower case, verify this
           RELEASE_KEYSTORE_PASSWORD: '${{ secrets.RELEASE_KEYSTORE_PASSWORD }}' # Password should be specified within the single quotes
@@ -100,14 +100,14 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: in.socialmail.app
-          releaseFiles: SocialMailApp/bin/Release/net7.0-android/publish/*-Signed.aab
+          releaseFiles: SocialMailApp/bin/Release/net8.0-android/publish/*-Signed.aab
           track: beta
           status: draft
           
       - name: 'Upload app to TestFlight'
         uses: apple-actions/upload-testflight-build@v1
         with: 
-          app-path: 'SocialMailApp/bin/Release/net7.0-ios/ios-arm64/publish/SocialMailApp.ipa' 
+          app-path: 'SocialMailApp/bin/Release/net8.0-ios/ios-arm64/publish/SocialMailApp.ipa' 
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
