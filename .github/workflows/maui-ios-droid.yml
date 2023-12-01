@@ -61,6 +61,13 @@ jobs:
       - name: Install .NET MAUI
         shell: bash
         run: |
+          curl -Lo dotnet.tar.gz https://download.visualstudio.microsoft.com/download/pr/e59acfc2-5987-43f9-bd03-0cbe446679e1/7db7313c1c99104279a69ccd47d160a1/dotnet-sdk-8.0.100-osx-x64.tar.gz
+          mkdir dotnet
+          tar -C dotnet -xf dotnet.tar.gz
+          rm dotnet.tar.gz
+          export DOTNET_ROOT=~/dotnet
+          export PATH=$PATH:~/dotnet
+          dotnet --version
           dotnet nuget locals all --clear 
           dotnet workload install maui --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet7/nuget/v3/index.json --source https://api.nuget.org/v3/index.json
           dotnet workload install android ios maccatalyst tvos macos maui wasm-tools --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet7/nuget/v3/index.json --source https://api.nuget.org/v3/index.json
