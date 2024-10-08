@@ -1,0 +1,38 @@
+name: build-android
+
+on:
+  push:
+    tags:
+      - '*'
+
+  workflow_dispatch:
+
+jobs:
+  
+  buildiOS:
+    runs-on: windows-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v3.0.0
+        with:
+          dotnet-version: 8.0.x
+      
+      - name: Install Jex
+        shell: bash
+        run: |
+          npm install
+
+      - name: Run Jex
+        shell: bash
+        run: node --enable-source-maps ./node_modules/@neurospeech/jex/index.js ./build-android.jsx
+        env:
+          SIGNING_KEY_ALIAS: ${{ vars.SIGNING_KEY_ALIAS }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          PLAYSTORE_SERVICE_ACCOUNT_JSON_TEXT: ${{ secrets.PLAYSTORE_SERVICE_ACCOUNT_JSON_TEXT }}
+
+
+
+        

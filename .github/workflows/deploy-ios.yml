@@ -1,0 +1,39 @@
+name: build-ios
+
+on:
+  push:
+    tags:
+      - '*'
+
+  workflow_dispatch:
+
+jobs:
+  
+  buildiOS:
+    runs-on: macos-14
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: maxim-Lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v3.0.0
+        with:
+          dotnet-version: 8.0.x
+      
+      - name: Install Jex
+        shell: bash
+        run: |
+          npm install
+
+      - name: Run Jex
+        shell: bash
+        run: node --enable-source-maps ./node_modules/@neurospeech/jex/index.js ./build-ios.jsx
+        env:
+          APPLE_DISTRIBUTION_CERT_PASS: ${{ secrets.APPLE_DISTRIBUTION_CERT_PASS }}
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+          APP_STORE_CONNECT_KEY_ID: ${{ vars.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ vars.APP_STORE_CONNECT_ISSUER_ID }}          

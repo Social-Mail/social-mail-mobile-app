@@ -1,0 +1,21 @@
+{
+    "name": "@social-mail/social-mail-mobile-app",
+    "version": "1.1.0",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "sync": "node ./node_modules/@dot-web-shell/cli sync",
+        "postversion": "git push --follow-tags",
+        "build": "node ./setup-build.mjs"
+    },
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "@positron-js/cli": "^1.0.6"
+    },
+    "dependencies": {
+        "@neurospeech/jex": "^1.0.103"
+    }
+}
