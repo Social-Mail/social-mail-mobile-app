@@ -29,9 +29,9 @@ jobs:
         shell: bash
         run: node --enable-source-maps ./node_modules/@neurospeech/jex/index.js ./build-android.jsx
         env:
-          SIGNING_KEY_ALIAS: ${{ vars.SIGNING_KEY_ALIAS }}
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          PLAYSTORE_SERVICE_ACCOUNT_JSON_TEXT: ${{ secrets.PLAYSTORE_SERVICE_ACCOUNT_JSON_TEXT }}
+          SIGNING_KEY_ALIAS: ${{ vars.RELEASE_KEYSTORE_ALIAS }}
+          KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+          PLAYSTORE_SERVICE_ACCOUNT_JSON_TEXT: ${{ secrets.SERVICE_ACCOUNT_JSON }}
 
 
 

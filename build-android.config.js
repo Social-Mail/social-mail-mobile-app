@@ -14,10 +14,10 @@ export default [
         javaHome: readEnv("JAVA_HOME_21_X64", readEnv("JAVA_HOME")),
 
         androidKeyStore: resolve("./cert/android.keystore"),
-        androidSigningKeyAlias: readEnv("RELEASE_KEYSTORE_ALIAS"),
+        androidSigningKeyAlias: readEnv("SIGNING_KEY_ALIAS"),
 
-        androidKeyStorePassword: readEnv("RELEASE_KEYSTORE_PASSWORD"),
-        serviceAccountJsonRaw: readEnv("SERVICE_ACCOUNT_JSON", ""),
+        androidKeyStorePassword: readEnv("KEYSTORE_PASSWORD"),
+        serviceAccountJsonRaw: readEnv("PLAYSTORE_SERVICE_ACCOUNT_JSON_TEXT", ""),
         serviceAccountJson: readEnv("PLAYSTORE_SERVICE_ACCOUNT_JSON_FILE", ""),
 
         /**
