@@ -15,7 +15,7 @@
 		<ApplicationTitle>Dot Web App</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.dot-web-shell.app</ApplicationId>
+		<ApplicationId>in.socialmail.app</ApplicationId>
 		<ApplicationIdGuid>9a90889c-f6bb-4a86-af88-208b55c8e17c</ApplicationIdGuid>
 
 		<!-- Versions -->
@@ -97,7 +97,7 @@
 		<PackageReference Include="Xamarin.AndroidX.Activity.Ktx" Version="1.10.1.2" />
 		<PackageReference Include="Xamarin.AndroidX.Fragment.Ktx" Version="1.8.8" />
 			
-		<!-- <GoogleServicesJson Include="config\google-services.json" /> -->
+		<GoogleServicesJson Include="config\google-services.json" />
 	</ItemGroup>
 
 	<ItemGroup>
