@@ -61,9 +61,16 @@
 	  	<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.6" />
 	</ItemGroup>
 
+	<!-- App Icon -->
+	<ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.ios.svg" Color="#FFFFFF" />
+	</ItemGroup>
+	<ItemGroup Condition="$(TargetFramework.Contains('-android'))">
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#FFFFFF" />
+	</ItemGroup>
+		
 	<ItemGroup>
-		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
