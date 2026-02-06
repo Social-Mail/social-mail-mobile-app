@@ -1,11 +1,9 @@
 name: build-ios
 
-on:
-  push:
-    tags:
-      - '*'
-
-  workflow_dispatch:
+# on:
+#   push:
+#     tags:
+#       - '*'
 
 jobs:
   
