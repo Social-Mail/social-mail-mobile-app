@@ -13,12 +13,12 @@ jobs:
     runs-on: windows-latest
     
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v3.0.0
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 10.0.x
       
       - name: Install Jex
         shell: bash
@@ -27,7 +27,7 @@ jobs:
 
       - name: Run Jex
         shell: bash
-        run: node --enable-source-maps ./node_modules/@neurospeech/jex/index.js ./build-android.jsx
+        run: node --enable-source-maps ./node_modules/@neurospeech/jex/index.js ./node_modules/@positron-js/cli/content/build-android.jsx
         env:
           SIGNING_KEY_ALIAS: ${{ secrets.RELEASE_KEYSTORE_ALIAS }}
           KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
