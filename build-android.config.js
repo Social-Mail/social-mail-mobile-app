@@ -16,6 +16,8 @@ export default [
         androidKeyStore: resolve("./cert/android.keystore"),
         androidSigningKeyAlias: readEnv("SIGNING_KEY_ALIAS"),
 
+        passphrase: readEnv("ENC_PASSPHRASE"),
+
         androidKeyStorePassword: readEnv("KEYSTORE_PASSWORD"),
         serviceAccountJsonRaw: readEnv("PLAYSTORE_SERVICE_ACCOUNT_JSON_TEXT", ""),
         serviceAccountJson: readEnv("PLAYSTORE_SERVICE_ACCOUNT_JSON_FILE", ""),

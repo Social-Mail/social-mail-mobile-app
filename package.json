@@ -6,13 +6,14 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "postversion": "git push --follow-tags",
+        "push": "git add -A && git commit -m \"dep vb\" && npm version patch",
         "build": "node ./setup-build.mjs"
     },
     "author": "",
     "license": "ISC",
     "description": "",
     "dependencies": {
-        "@positron-js/cli": "^1.0.16",
-        "@neurospeech/jex": "^1.0.145"
+        "@positron-js/cli": "^1.0.17",
+        "@neurospeech/jex": "^1.0.146"
     }
 }
