@@ -1,6 +1,6 @@
 {
     "name": "@social-mail/social-mail-mobile-app",
-    "version": "1.5.53",
+    "version": "1.5.54",
     "main": "index.js",
     "type": "module",
     "scripts": {
