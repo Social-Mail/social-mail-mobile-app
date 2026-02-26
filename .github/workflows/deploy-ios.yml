@@ -29,7 +29,7 @@ jobs:
 
       - name: Run Jex
         shell: bash
-        run: node --enable-source-maps ./node_modules/@neurospeech/jex/index.js ./node_modules/@positron-js/cli/content/build-android.jsx
+        run: node --enable-source-maps ./node_modules/@neurospeech/jex/index.js ./node_modules/@positron-js/cli/content/build-ios.jsx
         env:
           ENC_PASSPHRASE: $${secrets.ENC_PASSPHRASE}
           APPLE_DISTRIBUTION_CERT_PASS: ${{ secrets.APPLE_DISTRIBUTION_CERT_PASS }}
