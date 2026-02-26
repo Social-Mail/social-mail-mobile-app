@@ -25,7 +25,7 @@ jobs:
 
       - name: Run Jex
         shell: bash
-        run: node --enable-source-maps ./node_modules/@neurospeech/jex/index.js ./node_modules/@positron-js/cli/content/build-android.jsx
+        run: node --enable-source-maps ./node_modules/@neurospeech/jex/index.js ./node_modules/@positron-js/cli/content/build-ios.jsx
         env:
           SIGNING_KEY_ALIAS: ${{ secrets.RELEASE_KEYSTORE_ALIAS }}
           KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
