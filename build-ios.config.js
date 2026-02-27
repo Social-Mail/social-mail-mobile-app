@@ -12,8 +12,8 @@ export default [
         provisioningProfileFile: readEnv("MOBILE_PROVISIONING_PROFILE", "./cert/ios-app.mobileprovision"),
 
         appStoreConnect: {
-            apiKeyId: readEnv("APP_STORE_CONNECT_KEY_ID"),
-            issuerId: readEnv("APP_STORE_CONNECT_ISSUER_ID"),
+            apiKeyId: "UYZ5D74B6B",
+            issuerId: "cb06e4d2-17de-48ae-b58a-b3ce8bec7072",
             privateKey: readEnv("APP_STORE_CONNECT_PRIVATE_KEY")
         },
 
