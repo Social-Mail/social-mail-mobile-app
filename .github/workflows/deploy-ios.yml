@@ -8,7 +8,7 @@ on:
 jobs:
   
   buildiOS:
-    runs-on: macos-15-arm64
+    runs-on: macos-latest
     
     steps:
       - uses: actions/checkout@v4
