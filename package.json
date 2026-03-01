@@ -14,6 +14,6 @@
     "description": "",
     "dependencies": {
         "@positron-js/cli": "^1.0.30",
-        "@neurospeech/jex": "^1.0.151"
+        "@neurospeech/jex": "^1.0.152"
     }
 }
