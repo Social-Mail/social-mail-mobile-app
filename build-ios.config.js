@@ -14,8 +14,10 @@ export default [
         appStoreConnect: {
             apiKeyId: "UYZ5D74B6B",
             issuerId: "cb06e4d2-17de-48ae-b58a-b3ce8bec7072",
-            privateKey: readEnv("APP_STORE_CONNECT_PRIVATE_KEY")
+            privateKey: ""
         },
+
+        passphrase: readEnv("ENC_PASSPHRASE"),
 
         /**
          * could be timestamp or patch.
