@@ -13,7 +13,7 @@
     "license": "ISC",
     "description": "",
     "dependencies": {
-        "@positron-js/cli": "^1.0.34",
-        "@neurospeech/jex": "^1.0.154"
+        "@positron-js/cli": "^1.0.35",
+        "@neurospeech/jex": "^1.0.156"
     }
 }
