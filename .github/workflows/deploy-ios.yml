@@ -12,7 +12,9 @@ jobs:
     
     steps:
       - uses: actions/checkout@v4
-
+      - uses: actions/setup-node@v6
+        width:
+          node-version: 24
       - uses: maxim-Lobanov/setup-xcode@v1
         with:
           xcode-version: 26.2
