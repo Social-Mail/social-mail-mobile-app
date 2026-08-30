@@ -1,9 +1,9 @@
 name: build-android
 
-# on:
-#   push:
-#     tags:
-#       - '*'
+on:
+  push:
+    tags:
+      - '*'
 
 jobs:
   
@@ -11,17 +11,12 @@ jobs:
     runs-on: windows-latest
     
     steps:
-      - uses: actions/checkout@v4
-
+      - uses: actions/checkout@v7
       - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v3.0.0
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 10.0.x
-      
-      - name: Install Jex
-        shell: bash
-        run: |
-          npm install
+          workloads: maui, android
 
       - name: Run Jex
         shell: bash
