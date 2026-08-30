@@ -8,7 +8,7 @@ export default [
 
         url: "https://mails.socialmail.in",
 
-        targetFramework: "net10.0-android",
+        targetFramework: "net10.0-android36.0",
 
         androidSdkRoot: readEnv("ANDROID_SDK_ROOT"),
         javaHome: readEnv("JAVA_HOME_21_X64", readEnv("JAVA_HOME")),
