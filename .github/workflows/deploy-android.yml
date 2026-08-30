@@ -18,6 +18,12 @@ jobs:
           dotnet-version: 10.0.x
           workloads: maui, android
 
+      - name: Install Jex
+        shell: bash
+        run: |
+          npm install
+          
+          
       - name: Run Jex
         shell: bash
         run: node --enable-source-maps ./node_modules/@neurospeech/jex/index.js ./node_modules/@positron-js/cli/content/build-android.jsx
